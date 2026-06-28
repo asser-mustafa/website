@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorne — Clothing Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --cream:#f8f5f0;
+    --cream2:#ede8df;
+    --dark:#1c1917;
+    --dark2:#2e2a26;
+    --mid:#6b6560;
+    --gold:#b8924a;
+    --gold-light:#d4b07a;
+    --white:#ffffff;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'DM Sans','Inter',sans-serif;
+  }
+  body{font-family:var(--sans);background:var(--cream);color:var(--dark);font-weight:300;letter-spacing:.01em}
+
+  nav{background:var(--white);border-bottom:1px solid #e0dbd3;padding:0 2.5rem;position:sticky;top:0;z-index:50}
+  .nav-row{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:var(--serif);font-size:1.8rem;font-weight:300;letter-spacing:.22em;color:var(--dark);text-transform:uppercase;text-decoration:none}
+  .nav-links{display:flex;gap:2.2rem;list-style:none}
+  .nav-links a{color:var(--mid);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;font-weight:400;transition:color .2s}
+  .nav-links a:hover{color:var(--dark)}
+  .nav-right{display:flex;align-items:center;gap:1.4rem}
+  .nav-icon{background:none;border:none;cursor:pointer;color:var(--mid);font-size:18px;padding:4px;transition:color .2s;display:flex;align-items:flex-start}
+  .nav-icon:hover{color:var(--dark)}
+  .cart-count{background:var(--dark);color:var(--white);font-size:.6rem;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-weight:500;margin-left:-6px;margin-top:-8px}
+
+  .hero{display:grid;grid-template-columns:1fr 1fr;min-height:88vh;background:var(--dark2)}
+  .hero-left{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:flex-end}
+  .hero-tag{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;font-weight:400}
+  .hero-h{font-family:var(--serif);font-size:clamp(3rem,4.5vw,5.5rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:1.8rem}
+  .hero-h em{font-style:italic;display:block;color:var(--gold-light)}
+  .hero-body{font-size:.88rem;color:#b0a99e;line-height:1.8;max-width:300px;margin-bottom:3rem;font-weight:300}
+  .hero-actions{display:flex;gap:1rem;align-items:center}
+  .btn-primary{background:var(--gold);color:var(--white);border:none;padding:.8rem 2.2rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+  .btn-primary:hover{background:var(--gold-light)}
+  .btn-ghost{background:none;border:1px solid #4a4540;color:#9a948e;padding:.8rem 2rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:400;transition:all .2s}
+  .btn-ghost:hover{border-color:#8a847e;color:var(--white)}
+  .hero-right{position:relative;overflow:hidden}
+  .hero-right img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-right-overlay{position:absolute;inset:0;background:rgba(20,16,12,.25)}
+  .scroll-hint{position:absolute;bottom:2rem;right:2.5rem;display:flex;align-items:center;gap:.7rem}
+  .scroll-line{width:40px;height:1px;background:var(--gold);opacity:.7}
+  .scroll-text{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+  .strip{background:var(--dark);padding:.9rem 2rem;text-align:center}
+  .strip p{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#9a948e;font-weight:300}
+  .strip span{color:var(--gold-light);margin:0 1.2rem}
+
+  .collections{padding:6rem 2.5rem;max-width:1140px;margin:0 auto}
+  .section-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;font-weight:400}
+  .section-h{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--dark);margin-bottom:3.5rem;line-height:1.2}
+  .col-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1.5rem}
+  .col-card{position:relative;overflow:hidden;cursor:pointer}
+  .col-card:hover .col-overlay{opacity:1}
+  .col-card:hover .col-img{transform:scale(1.05)}
+  .col-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+  .col-tall{aspect-ratio:2/3}
+  .col-short{aspect-ratio:4/3}
+  .col-img-wrap{width:100%;height:100%;overflow:hidden}
+  .col-tall .col-img-wrap{aspect-ratio:2/3}
+  .col-short .col-img-wrap{aspect-ratio:4/3}
+  .col-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,16,12,.8) 35%,transparent 100%);opacity:.65;transition:opacity .4s;display:flex;align-items:flex-end;padding:2rem}
+  .col-card-title{font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--white);display:block}
+  .col-card-sub{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light)}
+  .col-col{display:flex;flex-direction:column;gap:1.5rem}
+
+  .featured{background:var(--white);padding:5rem 2.5rem}
+  .featured-inner{max-width:1140px;margin:0 auto}
+  .feat-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem}
+  .feat-link{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--cream2);padding-bottom:.2rem;transition:color .2s}
+  .feat-link:hover{color:var(--gold)}
+  .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+  .prod{cursor:pointer}
+  .prod-wrap{overflow:hidden;aspect-ratio:3/4;position:relative;margin-bottom:1rem}
+  .prod-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+  .prod:hover .prod-wrap img{transform:scale(1.06)}
+  .prod-badge{position:absolute;top:.8rem;left:.8rem;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.25rem .7rem;font-weight:500;z-index:2}
+  .badge-new{background:var(--dark);color:var(--white)}
+  .badge-sale{background:var(--gold);color:var(--white)}
+  .prod-brand{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-bottom:.2rem;font-weight:400}
+  .prod-name{font-family:var(--serif);font-size:1.05rem;font-weight:300;color:var(--dark);margin-bottom:.3rem;line-height:1.3}
+  .prod-pricing{display:flex;gap:.6rem;align-items:baseline;margin-bottom:.6rem}
+  .price{font-size:.92rem;font-weight:400;color:var(--dark)}
+  .price-old{font-size:.8rem;color:#b0a99e;text-decoration:line-through}
+  .prod-sizes{display:flex;gap:.3rem;margin-bottom:.8rem;flex-wrap:wrap}
+  .size-dot{width:28px;height:28px;border:1px solid #d8d3cc;font-size:.62rem;display:flex;align-items:center;justify-content:center;color:var(--mid);cursor:pointer;transition:all .15s}
+  .size-dot:hover{border-color:var(--dark);color:var(--dark)}
+  .prod-add{width:100%;padding:.55rem;border:1px solid #d8d3cc;background:none;font-family:var(--sans);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--mid);transition:all .2s;font-weight:400}
+  .prod-add:hover{background:var(--dark);border-color:var(--dark);color:var(--white)}
+
+  .editorial{background:var(--dark2);padding:0;display:grid;grid-template-columns:1fr 1fr;min-height:520px}
+  .ed-content{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center}
+  .ed-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+  .ed-title{font-family:var(--serif);font-size:clamp(2rem,3vw,3.2rem);font-weight:300;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
+  .ed-title em{font-style:italic;color:var(--gold-light)}
+  .ed-body{font-size:.88rem;color:#9a948e;line-height:1.9;margin-bottom:2.5rem;font-weight:300}
+  .ed-visual{overflow:hidden;position:relative}
+  .ed-visual img{width:100%;height:100%;object-fit:cover;display:block}
+  .ed-visual-overlay{position:absolute;inset:0;background:rgba(20,16,12,.15)}
+
+  .testimonials{padding:5rem 2.5rem;max-width:1140px;margin:0 auto;text-align:center}
+  .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
+  .test-card{padding:2rem;border:1px solid #e0dbd3;background:var(--white)}
+  .test-stars{color:var(--gold);font-size:.9rem;letter-spacing:.1em;margin-bottom:1rem}
+  .test-quote{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--dark);line-height:1.7;margin-bottom:1rem;font-style:italic}
+  .test-author{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mid)}
+
+  footer{background:var(--dark);color:#6a6460;padding:4rem 2.5rem 2rem}
+  .footer-inner{max-width:1140px;margin:0 auto}
+  .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+  .footer-brand{font-family:var(--serif);font-size:1.6rem;font-weight:300;letter-spacing:.18em;color:var(--white);text-transform:uppercase;margin-bottom:1rem}
+  .footer-tagline{font-size:.8rem;line-height:1.7;color:#5a5450;max-width:220px}
+  .footer-col h4{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#8a8480;margin-bottom:1.2rem;font-weight:400}
+  .footer-col ul{list-style:none}
+  .footer-col li{margin-bottom:.6rem}
+  .footer-col a{color:#5a5450;text-decoration:none;font-size:.82rem;transition:color .2s}
+  .footer-col a:hover{color:var(--gold-light)}
+  .footer-bottom{border-top:1px solid #2e2a26;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center}
+  .footer-copy{font-size:.7rem;letter-spacing:.06em;color:#3a3632}
+
+  .toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:var(--white);padding:1rem 1.6rem;font-size:.78rem;letter-spacing:.06em;transform:translateY(5rem);opacity:0;transition:all .35s;z-index:999;pointer-events:none;border-left:2px solid var(--gold)}
+  .toast.show{transform:translateY(0);opacity:1}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr}
+    .hero-right{min-height:400px}
+    .col-grid{grid-template-columns:1fr 1fr}
+    .prod-grid{grid-template-columns:repeat(2,1fr)}
+    .editorial{grid-template-columns:1fr}
+    .ed-visual{min-height:320px}
+    .footer-top{grid-template-columns:1fr 1fr}
+    .test-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+  @media(max-width:560px){
+    .col-grid{grid-template-columns:1fr}
+    .prod-grid{grid-template-columns:1fr 1fr}
+    .footer-top{grid-template-columns:1fr}
+    nav{padding:0 1.2rem}
+    .hero-left{padding:3rem 1.5rem}
+    .ed-content{padding:3rem 1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">Added to bag</div>
+
+<nav>
+  <div class="nav-row">
+    <a href="#" class="logo">Lorne</a>
+    <ul class="nav-links">
+      <li><a href="#">Women</a></li>
+      <li><a href="#">Men</a></li>
+      <li><a href="#">Collections</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-icon" aria-label="Search">
+        <i class="ti ti-search" style="font-size:18px"></i>
+      </button>
+      <button class="nav-icon" aria-label="Wishlist">
+        <i class="ti ti-heart" style="font-size:18px"></i>
+      </button>
+      <button class="nav-icon" aria-label="Shopping bag">
+        <i class="ti ti-shopping-bag" style="font-size:18px"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">New arrival — Autumn–Winter 2026</p>
+    <h1 class="hero-h">Dressed<br>for the<em>considered life</em></h1>
+    <p class="hero-body">Clothes that ask nothing of you but to be worn well. Each piece is designed to outlast the season it arrives in.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Explore collection</button>
+      <button class="btn-ghost">Our story</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img
+      src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=900&q=80&auto=format&fit=crop"
+      alt="Model wearing Lorne autumn collection"
+      loading="eager"
+    >
+    <div class="hero-right-overlay"></div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <p>Complimentary shipping on orders over $200 <span>·</span> Free returns within 30 days <span>·</span> Sustainably made</p>
+</div>
+
+<!-- COLLECTIONS -->
+<section class="collections">
+  <p class="section-label">Curated for you</p>
+  <h2 class="section-h">Shop by collection</h2>
+  <div class="col-grid">
+
+    <div class="col-card col-tall">
+      <div class="col-img-wrap">
+        <img class="col-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=700&q=80&auto=format&fit=crop" alt="Evening collection">
+      </div>
+      <div class="col-overlay">
+        <div>
+          <span class="col-card-title">Evening</span>
+          <span class="col-card-sub">34 pieces</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-col">
+      <div class="col-card col-short" style="flex:1">
+        <div class="col-img-wrap" style="height:100%">
+          <img class="col-img" src="https://images.unsplash.com/photo-1594938298603-f8d9f3a3f6a2?w=500&q=80&auto=format&fit=crop" alt="Tailoring collection">
+        </div>
+        <div class="col-overlay">
+          <div>
+            <span class="col-card-title">Tailoring</span>
+            <span class="col-card-sub">28 pieces</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-card col-short" style="flex:1">
+        <div class="col-img-wrap" style="height:100%">
+          <img class="col-img" src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=500&q=80&auto=format&fit=crop" alt="Essentials collection">
+        </div>
+        <div class="col-overlay">
+          <div>
+            <span class="col-card-title">Essentials</span>
+            <span class="col-card-sub">56 pieces</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-col">
+      <div class="col-card col-short" style="flex:1">
+        <div class="col-img-wrap" style="height:100%">
+          <img class="col-img" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&q=80&auto=format&fit=crop" alt="Knitwear collection">
+        </div>
+        <div class="col-overlay">
+          <div>
+            <span class="col-card-title">Knitwear</span>
+            <span class="col-card-sub">22 pieces</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-card col-short" style="flex:1">
+        <div class="col-img-wrap" style="height:100%">
+          <img class="col-img" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500&q=80&auto=format&fit=crop" alt="Outerwear collection">
+        </div>
+        <div class="col-overlay">
+          <div>
+            <span class="col-card-title">Outerwear</span>
+            <span class="col-card-sub">18 pieces</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="featured">
+  <div class="featured-inner">
+    <div class="feat-head">
+      <div>
+        <p class="section-label">Hand-picked</p>
+        <h2 class="section-h" style="margin-bottom:0">New this week</h2>
+      </div>
+      <a href="#" class="feat-link">View all new arrivals →</a>
+    </div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+</section>
+
+<!-- EDITORIAL -->
+<section class="editorial">
+  <div class="ed-content">
+    <p class="ed-label">The journal</p>
+    <h2 class="ed-title">The art of<em>dressing well</em></h2>
+    <p class="ed-body">What does it mean to dress with intention? We ask three stylists who've spent decades thinking about exactly this — and what they've learned might surprise you.</p>
+    <button class="btn-primary">Read the story</button>
+  </div>
+  <div class="ed-visual">
+    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80&auto=format&fit=crop" alt="Editorial fashion story">
+    <div class="ed-visual-overlay"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <p class="section-label" style="text-align:center">What our clients say</p>
+  <h2 class="section-h" style="text-align:center;margin-bottom:0">Worn with confidence</h2>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"The quality is unlike anything I've found at this price point. I've worn the linen coat every week since it arrived."</p>
+      <p class="test-author">— Amara K., London</p>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"Lorne really means it. The fit, the fabric, the packaging — every detail has been thought about."</p>
+      <p class="test-author">— Sophie M., Paris</p>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">"I bought the silk blouse on a whim and it's become the piece I reach for before anything else in my wardrobe."</p>
+      <p class="test-author">— Layla R., New York</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Lorne</div>
+        <p class="footer-tagline">Clothing made to be worn and reworn. Every piece designed with a longer life in mind.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">New arrivals</a></li>
+          <li><a href="#">Women</a></li>
+          <li><a href="#">Men</a></li>
+          <li><a href="#">Sale</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Size guide</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Our story</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Lorne. All rights reserved.</p>
+      <p class="footer-copy">Privacy · Terms · Cookies</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const products = [
+  {
+    name: 'Cashmere roll-neck',
+    brand: 'Knitwear',
+    price: 195,
+    old: null,
+    badge: 'New',
+    sizes: ['XS','S','M','L'],
+    img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&q=80&auto=format&fit=crop'
+  },
+  {
+    name: 'Wide-leg wool trouser',
+    brand: 'Tailored',
+    price: 165,
+    old: 240,
+    badge: 'Sale',
+    sizes: ['S','M','L','XL'],
+    img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80&auto=format&fit=crop'
+  },
+  {
+    name: 'Silk satin blouse',
+    brand: 'Luxe',
+    price: 145,
+    old: null,
+    badge: 'New',
+    sizes: ['XS','S','M'],
+    img: 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=500&q=80&auto=format&fit=crop'
+  },
+  {
+    name: 'Oversized linen coat',
+    brand: 'Outerwear',
+    price: 320,
+    old: null,
+    badge: null,
+    sizes: ['S','M','L'],
+    img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80&auto=format&fit=crop'
+  },
+];
+
+let cart = 0;
+
+function addToBag(name) {
+  cart++;
+  document.getElementById('cartCount').textContent = cart;
+  const t = document.getElementById('toast');
+  t.textContent = '"' + name + '" added to bag';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+document.getElementById('prodGrid').innerHTML = products.map(p => `
+  <div class="prod">
+    <div class="prod-wrap">
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      ${p.badge ? `<span class="prod-badge ${p.badge === 'Sale' ? 'badge-sale' : 'badge-new'}">${p.badge}</span>` : ''}
+    </div>
+    <p class="prod-brand">${p.brand}</p>
+    <p class="prod-name">${p.name}</p>
+    <div class="prod-pricing">
+      <span class="price">$${p.price}</span>
+      ${p.old ? `<span class="price-old">$${p.old}</span>` : ''}
+    </div>
+    <div class="prod-sizes">${p.sizes.map(s => `<div class="size-dot">${s}</div>`).join('')}</div>
+    <button class="prod-add" onclick="addToBag('${p.name}')">Add to bag</button>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
